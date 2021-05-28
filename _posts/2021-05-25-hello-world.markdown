@@ -1,9 +1,9 @@
 ---
 layout: post
 title:  "Hello, World"
-date:   2021-05-25 0:00:00 +0000
+date:   2021-06-01 0:00:00 +0000
 categories: intro
-excerpt: Whats
+hide: true
 ---
 
 Hello, World program in [Whitespace](https://en.wikipedia.org/wiki/Whitespace_(programming_language))
