@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Title | fastpages</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Title" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="An easy to use blogging platform with support for Jupyter Notebooks." />
+<meta property="og:description" content="An easy to use blogging platform with support for Jupyter Notebooks." />
+<link rel="canonical" href="https://novice03.github.io/blog/2021/05/27/multi-armed-bandits.html" />
+<meta property="og:url" content="https://novice03.github.io/blog/2021/05/27/multi-armed-bandits.html" />
+<meta property="og:site_name" content="fastpages" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-05-27T00:00:00-05:00" />
+<script type="application/ld+json">
+{"url":"https://novice03.github.io/blog/2021/05/27/multi-armed-bandits.html","@type":"BlogPosting","headline":"Title","dateModified":"2021-05-27T00:00:00-05:00","datePublished":"2021-05-27T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://novice03.github.io/blog/2021/05/27/multi-armed-bandits.html"},"description":"An easy to use blogging platform with support for Jupyter Notebooks.","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/blog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://novice03.github.io/blog/feed.xml" title="fastpages" /><link rel="shortcut icon" type="image/x-icon" href="/blog/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/blog/">fastpages</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/blog/about/">About Me</a><a class="page-link" href="/blog/search/">Search</a><a class="page-link" href="/blog/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Title</h1><p class="post-meta post-meta-title"><time class="dt-published" datetime="2021-05-27T00:00:00-05:00" itemprop="datePublished">
+        May 27, 2021
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      2 min read
+    
+</span></p>
+
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/novice03/blog/tree/master/_notebooks/2020-06-7-multi-armed-bandits.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/blog/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/novice03/blog/master?filepath=_notebooks%2F2020-06-7-multi-armed-bandits.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/blog/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/novice03/blog/blob/master/_notebooks/2020-06-7-multi-armed-bandits.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/blog/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2020-06-7-multi-armed-bandits.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Multi-arm-bandit-Problem">Multi-arm bandit Problem<a class="anchor-link" href="#Multi-arm-bandit-Problem"> </a></h2><ul>
+<li>A problem in which an action is taken only in one situation (<em>non-associative</em>). </li>
+<li>An agent must choose from <em>k</em> options. </li>
+<li>Each chosen action (option) gives a reward from a probability distribution specific to that option.</li>
+<li>The <em>goal</em> is to maximize the expected total reward over multiple action selections (time steps).</li>
+</ul>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">k</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">action_values</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="c1"># The average reward for each of the options. Used as mean in p.d. while choosing reward.</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">action_values</span><span class="p">)</span>
+<span class="n">steps</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">rewards</span> <span class="o">=</span> <span class="p">[]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[-0.9622023   1.84491299 -1.61877345  0.48772829  1.33372346 -0.46839888
+ -0.00491636 -1.59817654  0.93799994 -2.27956891]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">reward</span><span class="p">(</span><span class="n">action</span><span class="p">):</span> <span class="c1"># generates random reward for a specific action</span>
+    <span class="n">mu</span><span class="p">,</span> <span class="n">var</span> <span class="o">=</span> <span class="n">action_values</span><span class="p">[</span><span class="n">action</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="p">,</span><span class="mi">1</span>
+    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">mu</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The value of an action (expected reward when the action is selected) is denoted by $ q_*(a) = \mathbb{E}[\ R_t | A_t = a\ ]$</p>
+<p>The action values are stored in the action_values array. It is assumed that these values are not known, but can be estimated with some certainty. We use these estimates to choose actions. Such methods for estimating action values and using these values to influence actions are called action-value methods.</p>
+<p>One way to estimate the action value is to calculate the mean of rewards earned for that action until the current time step. The approximation $ Q_t(a) = \frac{\text{sum of rewards earned when action } a \text{ taken prior to }t}{\text{number of times a taken prior to }t}$ would converge to the action values as the number of time steps approches infinity.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">predicted_action_values</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">predicted_action_values</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[[0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">update_predicted_action_values</span><span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
+    <span class="n">action_index</span> <span class="o">=</span> <span class="n">action</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">current_prediction</span> <span class="o">=</span> <span class="n">predicted_action_values</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">action_index</span><span class="p">]</span>
+    <span class="n">times_chosen</span> <span class="o">=</span> <span class="n">predicted_action_values</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">action_index</span><span class="p">]</span>
+    
+    <span class="c1">#updated_prediction = current_prediction + (reward - current_prediction) / (times_chosen + 1)</span>
+    <span class="n">updated_prediction</span> <span class="o">=</span> <span class="p">(</span><span class="n">current_prediction</span> <span class="o">*</span> <span class="n">times_chosen</span> <span class="o">+</span> <span class="n">reward</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">times_chosen</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">updated_times_chosen</span> <span class="o">=</span> <span class="n">times_chosen</span> <span class="o">+</span> <span class="mi">1</span>
+    
+    <span class="n">predicted_action_values</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">action_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">updated_prediction</span>
+    <span class="n">predicted_action_values</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">action_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">updated_times_chosen</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Epsilon-greedy-actions">Epsilon greedy actions<a class="anchor-link" href="#Epsilon-greedy-actions"> </a></h2><p>One approach to the problem is to always choose an action that maximizes $Q_t(a)$. Such greedy actions do not explore seemingly low reward actions for high rewards. Therefore, with a random probability of $\epsilon$, an action can be chosen randomly.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">choose_best_action</span><span class="p">(</span><span class="n">action_values</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">action_values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="k">def</span> <span class="nf">choose_random_action</span><span class="p">(</span><span class="n">action_values</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">action_values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">action_values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">choose_action</span><span class="p">(</span><span class="n">action_values</span><span class="p">,</span> <span class="n">eps</span><span class="p">):</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">choice</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="p">[</span><span class="n">eps</span><span class="p">,</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">eps</span><span class="p">])</span>
+    
+    <span class="k">if</span> <span class="n">choice</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">choose_random_action</span><span class="p">(</span><span class="n">action_values</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">choose_best_action</span><span class="p">(</span><span class="n">action_values</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">time_step</span><span class="p">(</span><span class="n">action_values</span><span class="p">,</span> <span class="n">eps</span><span class="p">):</span>
+    <span class="n">chosen_action</span> <span class="o">=</span> <span class="n">choose_action</span><span class="p">(</span><span class="n">action_values</span><span class="p">,</span> <span class="n">eps</span><span class="p">)</span>
+    <span class="n">current_reward</span> <span class="o">=</span> <span class="n">reward</span><span class="p">(</span><span class="n">chosen_action</span><span class="p">)</span>
+    <span class="n">update_predicted_action_values</span><span class="p">(</span><span class="n">chosen_action</span><span class="p">,</span> <span class="n">current_reward</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">current_reward</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">rewards</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">mean_rewards</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">approximation_error</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">steps</span><span class="p">):</span>
+    <span class="n">reward_gained</span> <span class="o">=</span> <span class="n">time_step</span><span class="p">(</span><span class="n">predicted_action_values</span><span class="p">,</span> <span class="n">eps</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span>
+    <span class="n">rewards</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reward_gained</span><span class="p">)</span>
+    <span class="n">mean_rewards</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rewards</span><span class="p">))</span>
+    <span class="n">approximation_error</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">predicted_action_values</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> 
+                                                        <span class="n">numpy</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">action_values</span><span class="p">))))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">steps</span><span class="p">),</span> <span class="n">mean_rewards</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">steps</span><span class="p">),</span> <span class="n">approximation_error</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[&lt;matplotlib.lines.Line2D at 0x2674268b820&gt;]</pre>
+</div>
+
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="data:image/png;base64,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
+" />
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">action_values</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>1.8449129935143849
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The average reward gained over all the time steps converges to the highest action value. As the number of steps increases, the action with the highest value is chosen everytime unless a random action is chosen.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+
+
+  </div><a class="u-url" href="/blog/2021/05/27/multi-armed-bandits.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/blog/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/blog/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/blog/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>An easy to use blogging platform with support for Jupyter Notebooks.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/fastai" title="fastai"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/fastdotai" title="fastdotai"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
